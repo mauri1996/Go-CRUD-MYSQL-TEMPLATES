@@ -1,0 +1,63 @@
+// Extensiones
+Bootstrap 4, Font awesome 4, Font Awesome 5 Free & Pro snippets
+
+
+.tmpl -> extension para las plantillas
+
+b4-$ -> en al externsion creara toda la estructura html
+
+dentro de la plantilla se define el nombre y donde comienza:
+{{ define "inicio" }}
+
+donde termina:
+{{ end }}
+
+
+para llamar a un templete desde otro:
+{{ template "cabecera" }}
+
+
+// Database
+CREATE TABLE `sistema`.`empleados` ( `id` INT NOT NULL AUTO_INCREMENT , `nombre` VARCHAR(2500) NOT NULL , `correo` VARCHAR(2500) NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;
+INSERT INTO `empleados` (`id`, `nombre`, `correo`) VALUES (NULL, 'mauri', 'm@gmail.com');
+
+// Crear archivo de configuracion
+
+go mod init sistema
+
+// se verifica que se instalo correctamente el driver en go.mod
+
+// descargar driver
+go get -u github.com/go-sql-driver/mysql
+
+
+// Error:
+
+Si se da un error es necesario agregar esto al import para que detecte el driver:
+
+_ "github.com/go-sql-driver/mysql"
+
+
+http.Redirect(w, r, "/", 301) // redireccionar
+
+
+.Prepare("INSERT INTO empleados (nombre, correo) VALUES (?,?)")
+insertarRegistro.Exec(nombre, correo) // envia los datos parametros para q los cambie por ?
+
+
+obtener registros
+conexionEstablecida.Query("SELECT * FROM empleados")
+
+
+dentro de la plantilla para usar como for
+{{ range. }}
+
+acceder a los datos
+{{.Id}}
+
+{{end}}
+
+
+<a name="" id="" class="btn btn-danger" href="/borrar?id={{.Id}}" role="button">Borrar</a>
+
+idEmpleado := r.URL.Query().Get("id") // obtener datos desde la url
