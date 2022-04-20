@@ -61,3 +61,6 @@ acceder a los datos
 <a name="" id="" class="btn btn-danger" href="/borrar?id={{.Id}}" role="button">Borrar</a>
 
 idEmpleado := r.URL.Query().Get("id") // obtener datos desde la url
+
+<footer>
+</footer

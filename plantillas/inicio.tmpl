@@ -2,7 +2,9 @@
 
 {{ template "cabecera" }}
 
-<a name="" id="" class="btn btn-primary" href="/crear" role="button">Agregar Empleado</a>
+<a name="" id="" class="btn btn-primary mt-3" href="/crear" role="button">Agregar Empleado</a>
+<br/>
+<br/>
 <table class="table">
   <thead>
     <tr>
@@ -18,7 +20,7 @@
         <td scope="row">{{.Id}}</td>
         <td>{{.Nombre}}</td>
         <td>{{.Correo}}</td>
-        <td>Editas | <a name="" id="" class="btn btn-danger" href="/borrar?id={{.Id}}" role="button">Borrar</a></td>
+        <td><a name="" id="" class="btn btn-warning" href="/editar?id={{.Id}}" role="button">Editar</a> | <a name="" id="" class="btn btn-danger" href="/borrar?id={{.Id}}" role="button">Borrar</a></td>
       </tr>      
     {{ end }}
   </tbody>

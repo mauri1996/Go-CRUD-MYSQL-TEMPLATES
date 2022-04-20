@@ -37,8 +37,10 @@ var plantillas = template.Must(template.ParseGlob("plantillas/*")) // Obtener in
 func main() {
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/crear", Create)
-	http.HandleFunc("/insertar", Insert) // Para insertar los datos
-	http.HandleFunc("/borrar", Delete)   // Para borrar los datos
+	http.HandleFunc("/insertar", Insert)   // Para insertar los datos
+	http.HandleFunc("/borrar", Delete)     // Para borrar los datos
+	http.HandleFunc("/editar", Edit)       // Para editar los datos
+	http.HandleFunc("/actualizar", Update) // Para editar los datos
 
 	fmt.Println("Server Started ....") // hace lo mismo que log
 	//log.Println("Server Started ....")
@@ -128,4 +130,58 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 
 	deleteRegistro.Exec(idEmpleado) // envia los datos parametros para q los cambie por ?
 	http.Redirect(w, r, "/", 301)   // redireccionar
+}
+
+func Edit(w http.ResponseWriter, r *http.Request) {
+
+	idEmpleado := r.URL.Query().Get("id") // obtener datos desde la url
+
+	conexionEstablecida := conexionDB()
+	registro, err := conexionEstablecida.Query("SELECT * FROM empleados WHERE id=?", idEmpleado) // ejecuta sentencia sql y la devuelve
+
+	if err != nil {
+		fmt.Println("Error registor not found...")
+		panic(err.Error()) // Mostrar Error
+	}
+
+	empleado := Empleados{}
+
+	for registro.Next() { // recorrer registros
+		var id int
+		var nombre, correo string
+		err = registro.Scan(&id, &nombre, &correo) // saca la informacion y la coloca en las variables
+
+		if err != nil {
+			fmt.Println("Error registro not Scan...")
+			panic(err.Error()) // Mostrar Error
+		}
+
+		empleado.Id = id
+		empleado.Nombre = nombre
+		empleado.Correo = correo
+	}
+	// fmt.Println(empleado)
+	plantillas.ExecuteTemplate(w, "editar", empleado) // accede a la plantilla inicio y envia arregloEmpleado
+}
+
+func Update(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == "POST" { // si el metodo es post
+		// obtener datos del formulario
+		id := r.FormValue("id")
+		nombre := r.FormValue("nombre")
+		correo := r.FormValue("correo")
+
+		// INSERTAR DATOS
+		conexionEstablecida := conexionDB()
+		modificarRegistro, err := conexionEstablecida.Prepare("UPDATE empleados SET nombre=?, correo=? WHERE id=?")
+
+		if err != nil {
+			panic(err.Error()) // Mostrar Error
+		}
+
+		modificarRegistro.Exec(nombre, correo, id) // envia los datos parametros para q los cambie por ?
+	}
+
+	http.Redirect(w, r, "/", 301) // redireccionar
 }
